@@ -8,8 +8,7 @@
     },
     "lint": {},
     "deploy": {
-      "dependsOn": ["^deploy"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^deploy"]
     },
     "dev": {
       "cache": false,

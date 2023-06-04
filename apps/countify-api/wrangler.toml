@@ -2,3 +2,5 @@ name = "countify-api"
 main = "src/worker.ts"
 compatibility_date = "2023-06-04"
 usage_model = "unbound"
+workers_dev = false
+routes = ["api.countify.dev/*"]
