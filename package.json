@@ -12,7 +12,7 @@
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
     "prettier": "^2.5.1",
-    "turbo": "^1.9.7"
+    "turbo": "^1.10.1"
   },
   "name": "countify",
   "packageManager": "npm@9.6.6",
