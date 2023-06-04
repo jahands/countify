@@ -4,15 +4,33 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**/*"]
     },
-    "lint": {},
+    "lint": {
+      "dependsOn": ["^build"]
+    },
     "deploy": {
-      "dependsOn": ["^deploy"]
+      "dependsOn": ["lint"]
+    },
+    "deploy:wrangler": {
+      "outputs": ["dist/**/*"]
+    },
+    "sentry:sourcemaps": {
+      "dependsOn": ["deploy:wrangler"]
+    },
+    "sentry:commits": {
+      "dependsOn": ["sentry:sourcemaps"]
+    },
+    "sentry:finalize": {
+      "dependsOn": ["sentry:commits"]
     },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "//#format": {
+      "dependsOn": [],
+      "outputs": ["dist/**/*"]
     }
   }
 }

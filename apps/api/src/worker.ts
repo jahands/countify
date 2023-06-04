@@ -8,7 +8,6 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-
 // Export a default object containing event handlers
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
