@@ -16,4 +16,12 @@ const app = new Hono<App>()
 		return c.text('internal server error', 500)
 	})
 
+const v1 = new Hono<App>()
+	// Demo routes
+	.get('/hello', async (c) => {
+		return c.text('hello world')
+	})
+
+app.route('/v1', v1)
+
 export default app
