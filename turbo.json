@@ -7,6 +7,10 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {},
+    "deploy": {
+      "dependsOn": ["^deploy"],
+      "outputs": ["dist/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
