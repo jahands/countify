@@ -8,11 +8,11 @@
 		},
 		"lint": {},
 		"deploy": {
-			"dependsOn": ["lint"]
+			"dependsOn": ["^lint", "^build", "deploy:wrangler", "sentry:sourcemaps", "sentry:commits", "sentry:finalize"]
 		},
 		"deploy:wrangler": {
-			"outputs": ["dist/**/*"],
-			"inputs": ["src/**/*.ts"]
+			"dependsOn": ["lint"],
+			"outputs": ["dist/**/*"]
 		},
 		"sentry:sourcemaps": {
 			"dependsOn": ["deploy:wrangler"]
