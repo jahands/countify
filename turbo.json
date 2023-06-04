@@ -6,14 +6,13 @@
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**", "dist/**/*"]
 		},
-		"lint": {
-			"dependsOn": ["^build"]
-		},
+		"lint": {},
 		"deploy": {
 			"dependsOn": ["lint"]
 		},
 		"deploy:wrangler": {
-			"outputs": ["dist/**/*"]
+			"outputs": ["dist/**/*"],
+			"inputs": ["src/**/*.ts"]
 		},
 		"sentry:sourcemaps": {
 			"dependsOn": ["deploy:wrangler"]
