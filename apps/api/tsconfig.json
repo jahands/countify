@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/workers.json",
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+	"extends": "tsconfig/workers.json",
+	"include": ["**/*.ts"],
+	"exclude": ["node_modules"]
 }
