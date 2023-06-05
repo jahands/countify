@@ -6,6 +6,7 @@
 			"dependsOn": ["^build"],
 			"outputs": [".next/**", "!.next/cache/**", "dist/**/*"]
 		},
+		"test": {},
 		"lint": {},
 		"deploy": {
 			"dependsOn": ["^lint", "^build", "deploy:wrangler", "sentry:sourcemaps", "sentry:commits", "sentry:finalize"]
