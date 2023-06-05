@@ -1,6 +1,6 @@
 {
 	"name": "api",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"deploy:wrangler": "wrangler deploy --minify --outdir ./dist --var SENTRY_RELEASE:$(scripts/version.sh)",
