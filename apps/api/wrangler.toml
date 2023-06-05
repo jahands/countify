@@ -8,6 +8,11 @@ routes = ["api.countify.dev/*"]
 [define]
 ENVIRONMENT = '"production"'
 
+[durable_objects]
+bindings = [
+  { name = "COUNTER", class_name = "Counter" }
+]
+
 [[kv_namespaces]]
 binding = "CONFIG"
 id = "19ecdcf903f242bc935bd4e8e5f31d7e"

@@ -6,6 +6,7 @@ export type Bindings = {
   SENTRY_RELEASE: string
   
   CONFIG: KVNamespace
+  COUNTER: DurableObjectNamespace
 }
 
 /** Global Hono variables */

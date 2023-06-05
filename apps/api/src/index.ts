@@ -1,20 +1,11 @@
 import { Hono } from 'hono'
 import type { App } from './types'
 import { initSentry } from './sentry'
+import { newHono } from './hono'
 
-const app = new Hono<App>()
-	// Sentry
-	.use(async (c, next) => {
-		c.set('sentry', initSentry(c.req.raw, c.env, c.executionCtx))
-		await next()
-		if (c.error) {
-			c.get('sentry').captureException(c.error)
-		}
-	})
-	.onError((err, c) => {
-		c.get('sentry').captureException(err)
-		return c.text('internal server error', 500)
-	})
+export { Counter } from './Counter'
+
+const app = newHono()
 
 const v1 = new Hono<App>()
 	// Demo routes
@@ -28,6 +19,12 @@ const v1 = new Hono<App>()
 	.get(async (c) => {
 		const foo = await c.env.CONFIG.get('foo')
 		return c.body(foo)
+	})
+	// Demo counter
+	.all('/counter', async (c) => {
+		const id = c.env.COUNTER.idFromName('counter')
+		const stub = c.env.COUNTER.get(id)
+		return stub.fetch(c.req.raw)
 	})
 
 app.route('/v1', v1)
