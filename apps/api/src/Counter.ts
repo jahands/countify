@@ -10,15 +10,24 @@ export class Counter {
 	bindings: Bindings
 	value: number | null
 	queue: PQueue
+	app: Hono<App, {}, '/'>
 
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state
 		this.bindings = bindings
 		this.value = null
 		this.queue = new PQueue({ concurrency: 1, autoStart: true })
+		this.app = this.newApp()
 	}
 
 	async fetch(request: Request) {
+		return this.app.fetch(request, this.bindings, {
+			passThroughOnException: () => {},
+			waitUntil: this.state.waitUntil.bind(this.state),
+		})
+	}
+
+	newApp(): Hono<App, {}, '/'> {
 		const app = newHono()
 			// Add cors headers to all requests
 			.use(async (c, next) => {
@@ -60,11 +69,7 @@ export class Counter {
 			})
 
 		app.route('/v1', v1)
-
-		return app.fetch(request, this.bindings, {
-			passThroughOnException: () => {},
-			waitUntil: this.state.waitUntil.bind(this.state),
-		})
+		return app
 	}
 
 	async save() {
