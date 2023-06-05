@@ -52,7 +52,7 @@ export class Counter {
 				const value = this.value || 0
 				return c.json({ value })
 			})
-			.all(routes.v1.counter.inc, async (c) => {
+			.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
 				const existing = this.value || 0
 				this.value = existing + 1
 				this.save()

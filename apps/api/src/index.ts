@@ -43,7 +43,7 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 	.use(routes.v1.counter.all, async (c, next) => {
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
-		const re = /^[a-zA-Z0-9_\-.]{3,64}$/
+		const re = /^[a-zA-Z0-9_\-.]{4,64}$/
 
 		if (!re.test(namespace)) {
 			return c.json({ error: `invalid namespace, must match ${re}` }, { status: 400 })
@@ -66,7 +66,12 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 		}
 		await next()
 	})
+
 	.post(routes.v1.counter.new, async (c) => {
+		if (c.get('meta')) {
+			return c.json({ error: 'already exists' }, { status: 400 })
+		}
+
 		// Get an ID from the name so that it's consistent
 		const id = c.env.COUNTER.idFromName(c.get('configPath'))
 		const newMeta: CounterMeta = {
@@ -76,6 +81,7 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 		await c.env.CONFIG.put(c.get('configPath'), JSON.stringify(newMeta))
 		return c.json({ result: 'ok' })
 	})
+
 	.get(routes.v1.counter.get, async (c) => {
 		const meta = c.get('meta')
 		if (!meta) {
@@ -86,8 +92,12 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 		return stub.fetch(c.req.raw)
 	})
 
-	.all(routes.v1.counter.inc, async (c) => {
-		const id = c.env.COUNTER.idFromName(c.get('configPath'))
+	.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
+		const meta = c.get('meta')
+		if (!meta) {
+			return c.json({ error: 'not found' }, { status: 404 })
+		}
+		const id = c.env.COUNTER.idFromString(meta.id)
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)
 	})
