@@ -16,7 +16,6 @@ export function newHono(): Hono<App, {}, '/'> {
 			})
 			.onError((err, c) => {
 				c.get('sentry').captureException(err)
-        console.log(err)
 				return c.text('internal server error', 500)
 			})
 	)
