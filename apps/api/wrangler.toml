@@ -13,6 +13,10 @@ bindings = [
   { name = "COUNTER", class_name = "Counter" }
 ]
 
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["Counter"] # Array of new classes
+
 [[kv_namespaces]]
 binding = "CONFIG"
 id = "19ecdcf903f242bc935bd4e8e5f31d7e"
