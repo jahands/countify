@@ -43,7 +43,6 @@ export class Counter {
 
 	newV1() {
 		const v1 = new Hono<App>()
-			// Real endpoints
 			.all(routes.v1.counter.all, async (c, next) => {
 				// Load value from storage and set a timeout to save it
 				if (this.value === null) {

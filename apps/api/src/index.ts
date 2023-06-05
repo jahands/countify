@@ -17,29 +17,7 @@ const app = newHono()
 		await next()
 	})
 
-const v1 = new Hono<App>()
-	// Demo routes
-	.get('/hello', async (c) => {
-		return c.text('hello world')
-	})
-	.put('/config', async (c) => {
-		await c.env.CONFIG.put('foo', 'bar')
-		return c.text('ok')
-	})
-	.get(async (c) => {
-		const foo = await c.env.CONFIG.get('foo')
-		return c.body(foo)
-	})
-	// Demo counter
-	.all('/counter', async (c) => {
-		const id = c.env.COUNTER.idFromName('counter')
-		const stub = c.env.COUNTER.get(id)
-		return stub.fetch(c.req.raw)
-	})
-app.route('/v1', v1)
-
-const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string } }>()
-	// Actual counter
+const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
@@ -101,6 +79,7 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)
 	})
-app.route('/v1', counter)
+
+app.route('/v1', v1)
 
 export default app
