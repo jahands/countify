@@ -8,8 +8,7 @@ import { addCors, defaultCors } from './cors'
 
 export { Counter } from './Counter'
 
-const app = newHono()
-	.use(addCors)
+const app = newHono().use(addCors)
 
 const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
@@ -28,7 +27,7 @@ const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string 
 		const configPath = `${namespace}/${name}`
 		c.set('configPath', configPath)
 
-		const metaText = await c.env.CONFIG.get(configPath)
+		const metaText = await c.env.CONFIG.get(configPath, { cacheTtl: 120 })
 		if (metaText) {
 			const meta = JSON.parse(metaText)
 			if (!isCounterMeta(meta)) {
