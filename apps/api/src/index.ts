@@ -86,7 +86,7 @@ const counter = new Hono<App & { Variables: { meta?: CounterMeta; configPath: st
 		return stub.fetch(c.req.raw)
 	})
 
-	.post(routes.v1.counter.inc, async (c) => {
+	.all(routes.v1.counter.inc, async (c) => {
 		const id = c.env.COUNTER.idFromName(c.get('configPath'))
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)

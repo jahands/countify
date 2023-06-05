@@ -7,9 +7,11 @@ import { routes } from './routes'
 export class Counter {
 	state: DurableObjectState
 	bindings: Bindings
+	count: number
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state
 		this.bindings = bindings
+		this.count = 0
 	}
 
 	async fetch(request: Request) {
@@ -41,6 +43,12 @@ export class Counter {
 				return c.json({ value })
 			})
 			.post(routes.v1.counter.inc, async (c) => {
+				const value = await this.state.storage.get('value')
+				const newValue = typeof value === 'number' ? value + 1 : 1
+				this.state.storage.put('value', newValue)
+				return c.json({ value: newValue })
+			})
+			.all(routes.v1.counter.inc, async (c) => {
 				const value = await this.state.storage.get('value')
 				const newValue = typeof value === 'number' ? value + 1 : 1
 				this.state.storage.put('value', newValue)
