@@ -39,7 +39,7 @@ const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string 
 
 	.post(routes.v1.counter.new, async (c) => {
 		if (c.get('meta')) {
-			return c.json({ error: 'already exists' }, { status: 400 })
+			return c.json({ error: 'already exists' }, { status: 409 })
 		}
 
 		// Get an ID from the name so that it's consistent
@@ -49,7 +49,7 @@ const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string 
 			id: id.toString(),
 		}
 		await c.env.CONFIG.put(c.get('configPath'), JSON.stringify(newMeta))
-		return c.json({ result: 'ok' })
+		return c.json({ result: 'created' })
 	})
 
 	.get(routes.v1.counter.get, async (c) => {
