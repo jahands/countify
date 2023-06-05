@@ -49,5 +49,16 @@ describe('Worker', () => {
 				expect(json2).toEqual({ value: i + 1 })
 			}
 		})
+
+		it('should not create a counter if it already exists', async () => {
+			const res = await worker.fetch(path('new'), { method: 'POST' })
+			const text = await res.text()
+			expect(text).toMatchInlineSnapshot('"{\\"error\\":\\"already exists\\"}"')
+
+			// Make sure the value is still there
+			const res2 = await worker.fetch(path('get'))
+			const json2 = await res2.json()
+			expect(json2).toEqual({ value: 10 })
+		})
 	})
 })
