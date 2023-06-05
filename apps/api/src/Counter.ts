@@ -3,15 +3,19 @@ import { newHono } from './hono'
 import { App, Bindings } from './types'
 import { defaultCors } from './cors'
 import { routes } from './routes'
+import PQueue from 'p-queue'
 
 export class Counter {
 	state: DurableObjectState
 	bindings: Bindings
-	value: number
+	value: number | null
+	queue: PQueue
+
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state
 		this.bindings = bindings
-		this.value = 0
+		this.value = null
+		this.queue = new PQueue({ concurrency: 1, autoStart: true })
 	}
 
 	async fetch(request: Request) {
@@ -35,26 +39,41 @@ export class Counter {
 				this.state.storage.put('value', newValue)
 				return c.json({ value: newValue })
 			})
-		app.route('/v1', v1)
 
-		const counter = new Hono<App>()
+			// Real endpoints
+			.all(routes.v1.counter.all, async (c, next) => {
+				// Load value from storage and set a timeout to save it
+				if (this.value === null) {
+					this.value = (await this.state.storage.get('value')) || 0
+				}
+				await next()
+			})
 			.get(routes.v1.counter.get, async (c) => {
-				const value = (await this.state.storage.get('value')) || 0
+				const value = this.value || 0
 				return c.json({ value })
 			})
 			.all(routes.v1.counter.inc, async (c) => {
-				const value = await this.state.storage.get('value')
-				const newValue = typeof value === 'number' ? value + 1 : 1
-				this.state.storage.put('value', newValue)
-				return c.json({ value: newValue })
+				const existing = this.value || 0
+				this.value = existing + 1
+				this.save()
+				return c.json({ value: this.value })
 			})
 
-
-		app.route('/v1', counter)
+		app.route('/v1', v1)
 
 		return app.fetch(request, this.bindings, {
 			passThroughOnException: () => {},
 			waitUntil: this.state.waitUntil.bind(this.state),
 		})
+	}
+
+	async save() {
+		if (this.queue.size < 2) {
+			this.queue.add(async () => {
+				// save value every 5 second to storage
+				await scheduler.wait(5000)
+				this.state.storage.put('value', this.value)
+			})
+		}
 	}
 }
