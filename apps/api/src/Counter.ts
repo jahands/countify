@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
-import { addCors, defaultCors } from './cors'
+import { addCors } from './cors'
 import { routes } from './routes'
 import PQueue from 'p-queue'
 

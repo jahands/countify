@@ -1,10 +1,9 @@
-import { Context, Hono } from 'hono'
+import { Hono } from 'hono'
 import type { App, CounterMeta } from './types'
-import { initSentry } from './sentry'
 import { newHono } from './hono'
 import { routes } from './routes'
 import { isCounterMeta } from './typeguards'
-import { addCors, defaultCors } from './cors'
+import { addCors } from './cors'
 
 export { Counter } from './Counter'
 
