@@ -7,3 +7,8 @@ routes = ["api.countify.dev/*"]
 
 [define]
 ENVIRONMENT = '"production"'
+
+[[kv_namespaces]]
+binding = "CONFIG"
+id = "19ecdcf903f242bc935bd4e8e5f31d7e"
+preview_id = "38195bdce3e04a679558080b2de9bd86"

@@ -21,6 +21,14 @@ const v1 = new Hono<App>()
 	.get('/hello', async (c) => {
 		return c.text('hello world')
 	})
+	.put('/config', async (c) => {
+		await c.env.CONFIG.put('foo', 'bar')
+		return c.text('ok')
+	})
+	.get(async (c) => {
+		const foo = await c.env.CONFIG.get('foo')
+		return c.body(foo)
+	})
 
 app.route('/v1', v1)
 

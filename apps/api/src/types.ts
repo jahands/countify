@@ -3,7 +3,9 @@ import { Toucan } from 'toucan-js'
 /** Workers bindings */
 export type Bindings = {
 	SENTRY_DSN: string
-	SENTRY_RELEASE: string
+  SENTRY_RELEASE: string
+  
+  CONFIG: KVNamespace
 }
 
 /** Global Hono variables */

@@ -10,6 +10,7 @@ coverage
 
 # workers
 dist/
+.wrangler/
 
 # next.js
 .next/
