@@ -1,21 +1,15 @@
-import { Hono } from 'hono'
+import { Context, Hono } from 'hono'
 import type { App, CounterMeta } from './types'
 import { initSentry } from './sentry'
 import { newHono } from './hono'
 import { routes } from './routes'
 import { isCounterMeta } from './typeguards'
-import { defaultCors } from './cors'
+import { addCors, defaultCors } from './cors'
 
 export { Counter } from './Counter'
 
 const app = newHono()
-	// Add cors headers to all requests
-	.use(async (c, next) => {
-		for (const [k, v] of Object.entries(defaultCors)) {
-			c.header(k, v)
-		}
-		await next()
-	})
+	.use(addCors)
 
 const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {

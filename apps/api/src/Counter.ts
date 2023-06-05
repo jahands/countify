@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
-import { defaultCors } from './cors'
+import { addCors, defaultCors } from './cors'
 import { routes } from './routes'
 import PQueue from 'p-queue'
 
@@ -30,12 +30,7 @@ export class Counter {
 	newApp(): Hono<App, {}, '/'> {
 		const app = newHono()
 			// Add cors headers to all requests
-			.use(async (c, next) => {
-				for (const [k, v] of Object.entries(defaultCors)) {
-					c.header(k, v)
-				}
-				await next()
-			})
+			.use(addCors)
 			.route('/v1', this.newV1())
 
 		return app
