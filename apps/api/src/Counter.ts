@@ -36,19 +36,13 @@ export class Counter {
 				}
 				await next()
 			})
+			.route('/v1', this.newV1())
 
+		return app
+	}
+
+	newV1() {
 		const v1 = new Hono<App>()
-			.get('/counter', async (c) => {
-				const value = (await this.state.storage.get('value')) || 0
-				return c.json({ value })
-			})
-			.put(async (c) => {
-				const value = await this.state.storage.get('value')
-				const newValue = typeof value === 'number' ? value + 1 : 1
-				this.state.storage.put('value', newValue)
-				return c.json({ value: newValue })
-			})
-
 			// Real endpoints
 			.all(routes.v1.counter.all, async (c, next) => {
 				// Load value from storage and set a timeout to save it
@@ -68,8 +62,7 @@ export class Counter {
 				return c.json({ value: this.value })
 			})
 
-		app.route('/v1', v1)
-		return app
+		return v1
 	}
 
 	async save() {
