@@ -62,8 +62,8 @@ export class Counter {
 	async save() {
 		if (this.queue.size < 2) {
 			this.queue.add(async () => {
-				// save value every 5 second to storage
-				await scheduler.wait(5000)
+				// save value every 4 second to storage
+				await scheduler.wait(4000)
 				this.state.storage.put('value', this.value)
 			})
 		}
