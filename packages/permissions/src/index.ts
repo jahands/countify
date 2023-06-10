@@ -2,6 +2,7 @@ import { Permissions, Schema } from 'permissible'
 import { JsonPermissions } from 'permissible/src/types'
 
 export function demo(): void {
+	return
 	const jsonSchema = {
 		sendMessage: true,
 		readMessageHistory: true,
