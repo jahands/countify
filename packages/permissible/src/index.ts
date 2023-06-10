@@ -61,7 +61,7 @@ export class Schema<T extends JsonSchema> {
 
 class ParameterError extends Error {}
 
-const base64Regex = /^(?:[A-Za-z\d+/]{4})*(?:[A-Za-z\d+/]{4}|[A-Za-z\d+/]{3}=|[A-Za-z\d+/]{2}={2})$/g
+// const base64Regex = /^(?:[A-Za-z\d+/]{4})*(?:[A-Za-z\d+/]{4}|[A-Za-z\d+/]{3}=|[A-Za-z\d+/]{2}={2})$/g
 
 export class Permissions<T extends JsonSchema> {
 	private permissions: bigint
