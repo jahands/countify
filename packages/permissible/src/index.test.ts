@@ -3,7 +3,7 @@ import { JsonPermissions } from './types'
 import { describe, it, expect } from 'vitest'
 
 describe('premissible', () => {
-	describe('original tests', () => {
+	it('original tests', () => {
 		const jsonSchema = {
 			writeAccess: false,
 			readAccess: true,
@@ -85,6 +85,26 @@ describe('premissible', () => {
 	})
 
 	describe('more tests', () => {
+		it('should support enums', () => {
+			const jsonSchema = {
+				type: {
+					default: 'user',
+					fields: ['user', 'admin'],
+				},
+			}
+
+			const schema = new Schema(jsonSchema)
+
+			const perms = schema.createDefault()
+
+			expect(perms.toJson()).toMatchInlineSnapshot(`
+				{
+				  "type": "user",
+				}
+			`)
+			console.log('schema.fields.type.user', schema.fields.type.user)
+			expect(perms.is(schema.fields.type, schema.fields.type.user)).toBe(true)
+		})
 		it('should allow adding new perms', () => {
 			const jsonSchema = {
 				sendMessage: true,

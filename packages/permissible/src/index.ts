@@ -1,4 +1,4 @@
-import { Field, JsonPermissions, JsonSchema, Fields, JsonEnum } from './types'
+import { Field, JsonPermissions, JsonSchema, Fields, FieldValue } from './types'
 import { bigintToBase64, base64ToBigint } from 'bigint-conversion'
 
 export class Schema<T extends JsonSchema> {
@@ -11,7 +11,7 @@ export class Schema<T extends JsonSchema> {
 
 		let index = 0n
 		for (const field in jsonSchema) {
-			const value: boolean | { default: string; fields: string[] } = jsonSchema[field]
+			const value: FieldValue = jsonSchema[field]
 			if (typeof value === 'boolean') {
 				this.fields[field] = {
 					index,
@@ -43,7 +43,7 @@ export class Schema<T extends JsonSchema> {
 
 		const permissions: Permissions<T> = new Permissions<T>(0n, this)
 		for (const field in jsonSchema) {
-			const value: boolean | JsonEnum = jsonSchema[field]
+			const value: FieldValue = jsonSchema[field]
 			if (typeof value === 'boolean') {
 				permissions.set(this.fields[field], value)
 			} else {
@@ -110,7 +110,7 @@ export class Permissions<T extends JsonSchema> {
 	}
 
 	is(field: Field, value?: bigint): boolean {
-		if (!value) value = 1n
+		if (value === undefined) value = 1n
 
 		if (field.length === 1n) {
 			return !!(this.permissions & (1n << field.index)) === !!value

@@ -4,8 +4,8 @@ export type Field = {
 	[key: string]: bigint
 }
 export type JsonPermissions = Record<string, boolean | string>
-export type JsonEnum = { default: string; fields: string[] }
-export type JsonSchema = Record<string, boolean | JsonEnum>
+export type FieldValue = boolean | { default: string; fields: string[] }
+export type JsonSchema = Record<string, FieldValue>
 export type Fields<T> = {
 	[key in keyof T]: Field
 }
