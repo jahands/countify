@@ -19,7 +19,7 @@ describe('Worker', () => {
 	})
 
 	describe('counter', () => {
-		const path = (action: CounterAction) => `/v1/${action}/myNamespace/myCounter`
+		const path = (action: CounterAction): string => `/v1/${action}/myNamespace/myCounter`
 		it('should not already have a counter', async () => {
 			const res = await worker.fetch(path('get'))
 			const json = await res.json()
