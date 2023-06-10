@@ -68,6 +68,10 @@ export class Permissions<T extends JsonSchema> {
 	private schema: Schema<T>
 
 	static fromBase64<U extends JsonSchema>(permissions: string, schema: Schema<U>): Permissions<U> {
+		if (permissions.length < 4 && !permissions.endsWith('=')) {
+			// Manually add padding back in if needed
+			permissions += '='.repeat(4 - permissions.length)
+		}
 		if (Math.ceil(schema.length / 24) * 4 !== permissions.length) {
 			throw new ParameterError(
 				`Invalid string input, expected string of length ${Math.ceil(schema.length / 24) * 4}, received string of length ${
@@ -76,9 +80,10 @@ export class Permissions<T extends JsonSchema> {
 			)
 		}
 
-		if (!base64Regex.exec(permissions)) {
-			throw new ParameterError('Invalid base64 string')
-		}
+		// TODO: Find better way to validate this
+		// if (!base64Regex.test(permissions)) {
+		// 	throw new ParameterError('Invalid base64 string')
+		// }
 		return new Permissions(base64ToBigint(permissions), schema)
 	}
 
@@ -134,7 +139,7 @@ export class Permissions<T extends JsonSchema> {
 	}
 
 	toBase64(): string {
-		return bigintToBase64(this.permissions, true, true)
+		return bigintToBase64(this.permissions, true, false)
 	}
 
 	toJson(): JsonPermissions {

@@ -102,9 +102,72 @@ describe('premissible', () => {
 				  "type": "user",
 				}
 			`)
-			console.log('schema.fields.type.user', schema.fields.type.user)
 			expect(perms.is(schema.fields.type, schema.fields.type.user)).toBe(true)
 		})
+
+		it('set/unset should work', () => {
+			const jsonSchema = {
+				a: true,
+				b: false,
+				c: true,
+				d: false,
+			}
+
+			const schema = new Schema(jsonSchema)
+
+			const perms = schema.createDefault()
+
+			expect(perms.toJson()).toMatchInlineSnapshot(`
+				{
+				  "a": true,
+				  "b": false,
+				  "c": true,
+				  "d": false,
+				}
+			`)
+			expect(perms.toBase64()).toMatchInlineSnapshot('"BQ"')
+			expect(Permissions.fromBase64(perms.toBase64(), schema).toJson()).toMatchInlineSnapshot(`
+				{
+				  "a": true,
+				  "b": false,
+				  "c": true,
+				  "d": false,
+				}
+			`)
+
+			expect(perms.is(schema.fields.a)).toBe(true)
+			expect(perms.is(schema.fields.b)).toBe(false)
+			expect(perms.is(schema.fields.c)).toBe(true)
+			expect(perms.is(schema.fields.d)).toBe(false)
+
+			perms.set(schema.fields.a, false)
+			perms.set(schema.fields.c, false)
+
+			expect(perms.is(schema.fields.a)).toBe(false)
+			expect(perms.is(schema.fields.b)).toBe(false)
+			expect(perms.is(schema.fields.c)).toBe(false)
+			expect(perms.is(schema.fields.d)).toBe(false)
+
+			expect(perms.toJson()).toMatchInlineSnapshot(`
+				{
+				  "a": false,
+				  "b": false,
+				  "c": false,
+				  "d": false,
+				}
+			`)
+			expect(perms.toBase64()).toMatchInlineSnapshot('"AA"')
+
+			expect(Permissions.fromBase64(perms.toBase64(), schema).toJson()).toMatchInlineSnapshot(`
+				{
+				  "a": false,
+				  "b": false,
+				  "c": false,
+				  "d": false,
+				}
+			`)
+		})
+
 		it('should allow adding new perms', () => {
 			const jsonSchema = {
 				sendMessage: true,
@@ -118,7 +181,7 @@ describe('premissible', () => {
 			const schema = new Schema(jsonSchema)
 
 			const perms = schema.createDefault()
-			expect(perms.toBase64()).toMatchInlineSnapshot('"BQ=="')
+			expect(perms.toBase64()).toMatchInlineSnapshot('"BQ"')
 			const permsJson = {
 				readMessageHistory: false,
 				sendMessage: true,
@@ -150,7 +213,7 @@ describe('premissible', () => {
 				...permsJson,
 				deleteMessage: false,
 			})
-			expect(perms2.toBase64()).toMatchInlineSnapshot('"BQ=="')
+			expect(perms2.toBase64()).toMatchInlineSnapshot('"BQ"')
 
 			// Make sure perms haven't changed
 			expect(perms2.is(schema2.fields.sendMessage)).toBe(permsJson.sendMessage)
@@ -172,7 +235,7 @@ describe('premissible', () => {
 			perms2.set(schema2.fields.sendMessage, false)
 			expect(perms2.is(schema2.fields.sendMessage)).toBe(false)
 
-			expect(perms2.toBase64()).toMatchInlineSnapshot('"LA=="')
+			expect(perms2.toBase64()).toMatchInlineSnapshot('"LA"')
 		})
 
 		it('should be able to support lots of permissions', () => {
@@ -292,7 +355,7 @@ describe('premissible', () => {
 			const schema = new Schema(jsonSchema)
 
 			const perms = schema.createDefault()
-			expect(perms.toBase64()).toMatchInlineSnapshot('"JDIRCIRCEMhkIhEIhCE="')
+			expect(perms.toBase64()).toMatchInlineSnapshot('"JDIRCIRCEMhkIhEIhCE"')
 			expect(Object.entries(jsonSchema).length).toBe(110)
 
 			expect(perms.toJson()).toStrictEqual(jsonSchema)
