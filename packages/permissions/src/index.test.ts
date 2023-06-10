@@ -1,12 +1,9 @@
 import { describe, expect, it, beforeAll, afterAll } from 'vitest'
-import { demo } from '.'
+import { schema } from '.'
 
 describe('permissions', () => {
 	it('should parse permissions', () => {
-		expect(1).toBe(1)
-	})
-
-	it('should run demo', () => {
-		demo()
+		const perms = schema.createDefault()
+		expect(perms.is(schema.fields.valid)).toBe(true)
 	})
 })
