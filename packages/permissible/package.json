@@ -31,9 +31,6 @@
 	"files": [
 		"lib/**/*"
 	],
-	"dependencies": {
-		"bigint-buffer": "^1.1.5"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/markisha64/permissible"
