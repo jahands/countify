@@ -1,0 +1,19 @@
+{
+	"name": "permissions",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Manage permissions for the app",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"permissible": "^1.0.1"
+	},
+	"devDependencies": {
+		"vitest": "^0.32.0"
+	}
+}

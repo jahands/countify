@@ -19,7 +19,7 @@
 		"itty-router": "^3.0.12",
 		"tsconfig": "*",
 		"typescript": "^5.0.4",
-		"vitest": "^0.31.4",
+		"vitest": "^0.32.0",
 		"wrangler": "^3.0.1"
 	},
 	"dependencies": {
