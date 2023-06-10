@@ -1,4 +1,4 @@
-import { Field, JsonPermissions, JsonSchema, Fields } from './types'
+import { Field, JsonPermissions, JsonSchema, Fields, JsonEnum } from './types'
 import { bigintToBase64, base64ToBigint } from 'bigint-conversion'
 
 export class Schema<T extends JsonSchema> {
@@ -43,7 +43,7 @@ export class Schema<T extends JsonSchema> {
 
 		const permissions: Permissions<T> = new Permissions<T>(0n, this)
 		for (const field in jsonSchema) {
-			const value: boolean | { default: string; fields: string[] } = jsonSchema[field]
+			const value: boolean | JsonEnum = jsonSchema[field]
 			if (typeof value === 'boolean') {
 				permissions.set(this.fields[field], value)
 			} else {
