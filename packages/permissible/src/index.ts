@@ -1,4 +1,3 @@
-import { toBigIntLE, toBufferLE } from 'bigint-buffer'
 import { Field, JsonPermissions, JsonSchema, Fields } from './types'
 
 export class Schema<T extends JsonSchema> {
@@ -79,7 +78,7 @@ export class Permissions<T extends JsonSchema> {
 		if (!base64Regex.exec(permissions)) {
 			throw new ParameterError('Invalid base64 string')
 		}
-		return new Permissions(toBigIntLE(Buffer.from(permissions, 'base64')), schema)
+		return new Permissions(BigInt(atob(permissions)), schema)
 	}
 
 	static fromJson<U extends JsonSchema>(permissions: JsonPermissions, schema: Schema<U>): Permissions<U> {
@@ -134,7 +133,8 @@ export class Permissions<T extends JsonSchema> {
 	}
 
 	toBase64(): string {
-		return toBufferLE(this.permissions, Math.ceil(this.schema.length / 24) * 3).toString('base64')
+		console.log('********', this.permissions.toString())
+		return btoa(this.permissions.toString())
 	}
 
 	toJson(): JsonPermissions {

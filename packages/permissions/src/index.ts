@@ -1,5 +1,5 @@
 import { Permissions, Schema } from 'permissible'
-import { JsonPermissions } from 'permissible/lib/types'
+import { JsonPermissions } from 'permissible/src/types'
 
 export function demo(): void {
 	const jsonSchema = {

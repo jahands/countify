@@ -5,13 +5,14 @@
 	"description": "Manage permissions for the app",
 	"main": "src/index.ts",
 	"scripts": {
+		"build": "tsc",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"permissible": "^1.0.1"
+		"permissible": "*"
 	},
 	"devDependencies": {
 		"vitest": "^0.32.0",
