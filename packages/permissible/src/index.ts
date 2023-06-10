@@ -1,4 +1,5 @@
 import { Field, JsonPermissions, JsonSchema, Fields } from './types'
+import { bigintToBase64, base64ToBigint } from 'bigint-conversion'
 
 export class Schema<T extends JsonSchema> {
 	public readonly length: number
@@ -78,7 +79,7 @@ export class Permissions<T extends JsonSchema> {
 		if (!base64Regex.exec(permissions)) {
 			throw new ParameterError('Invalid base64 string')
 		}
-		return new Permissions(BigInt(atob(permissions)), schema)
+		return new Permissions(base64ToBigint(permissions), schema)
 	}
 
 	static fromJson<U extends JsonSchema>(permissions: JsonPermissions, schema: Schema<U>): Permissions<U> {
@@ -133,8 +134,7 @@ export class Permissions<T extends JsonSchema> {
 	}
 
 	toBase64(): string {
-		console.log('********', this.permissions.toString())
-		return btoa(this.permissions.toString())
+		return bigintToBase64(this.permissions, true, true)
 	}
 
 	toJson(): JsonPermissions {

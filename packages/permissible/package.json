@@ -33,5 +33,8 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/markisha64/permissible"
+	},
+	"dependencies": {
+		"bigint-conversion": "^2.4.1"
 	}
 }
