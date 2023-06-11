@@ -96,7 +96,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 				await stub.fetch(c.req.raw)
 			}
 			c.executionCtx.waitUntil(fn())
-			return c.text('ok')
+			return c.json({ status: 'ok' })
 		}
 
 		// Otherwise, return the response from the DO
