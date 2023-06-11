@@ -48,10 +48,12 @@ export class Counter {
 				}
 				await next()
 			})
+
 			.get(routes.v1.counter.get, async (c) => {
 				const value = this.value || 0
 				return c.json({ value })
 			})
+
 			.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
 				const existing = this.value || 0
 				this.value = existing + 1
