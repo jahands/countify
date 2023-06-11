@@ -26,7 +26,11 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		const configPath = `${namespace}/${name}`
 		c.set('configPath', configPath)
 
+		const start = new Date().getTime()
 		const metaText = await c.env.CONFIG.get(configPath, { cacheTtl: 120 })
+		const end = new Date().getTime()
+		console.log(`got config in ${end - start}ms`)
+
 		if (metaText) {
 			const config = CounterConfig.fromJson(metaText)
 			c.set('config', config)
@@ -82,10 +86,6 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
 		}
-		console.log({
-			isValid: config.isValid(),
-			useAuth: config.useAuth(),
-		})
 
 		// Go faster at the expense of not confirming
 		// the write before returning
