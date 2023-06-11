@@ -68,6 +68,10 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
 		}
+		console.log({
+			isValid: config.isValid(),
+			useAuth: config.useAuth(),
+		})
 		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)

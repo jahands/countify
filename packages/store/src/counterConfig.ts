@@ -76,4 +76,9 @@ export class CounterConfig implements CounterMeta {
 	isValid(): boolean {
 		return this.flags.is(flagsSchema.fields.isValid)
 	}
+
+	/** Indicates that auth is enabled */
+	useAuth(): boolean {
+		return this.flags.is(flagsSchema.fields.useAuth)
+	}
 }
