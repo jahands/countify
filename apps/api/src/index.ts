@@ -86,9 +86,23 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 			isValid: config.isValid(),
 			useAuth: config.useAuth(),
 		})
+
+		// Go faster at the expense of not confirming
+		// the write before returning
+		if (c.req.query('fast') === 'true') {
+			const fn = async (): Promise<void> => {
+				const id = c.env.COUNTER.idFromString(config.id)
+				const stub = c.env.COUNTER.get(id)
+				await stub.fetch(c.req.raw)
+			}
+			c.executionCtx.waitUntil(fn())
+			return c.text('ok')
+		}
+
+		// Otherwise, return the response from the DO
 		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
-		return stub.fetch(c.req.raw)
+		await stub.fetch(c.req.raw)
 	})
 
 app.route('/v1', v1)
