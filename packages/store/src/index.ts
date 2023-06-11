@@ -6,3 +6,5 @@ export const jsonSchema = {
 }
 
 export const schema = new Schema(jsonSchema)
+
+export * from './counterConfig'

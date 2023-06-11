@@ -1,15 +1,15 @@
 import { Hono } from 'hono'
-import type { App, CounterMeta } from './types'
+import type { App } from './types'
 import { newHono } from './hono'
 import { routes } from './routes'
-import { isCounterMeta } from './typeguards'
 import { addCors } from './cors'
+import { CounterConfig, flagsSchema } from 'store'
 
 export { Counter } from './Counter'
 
 const app = newHono().use(addCors)
 
-const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string } }>()
+const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
@@ -28,46 +28,47 @@ const v1 = new Hono<App & { Variables: { meta?: CounterMeta; configPath: string 
 
 		const metaText = await c.env.CONFIG.get(configPath, { cacheTtl: 120 })
 		if (metaText) {
-			const meta = JSON.parse(metaText)
-			if (!isCounterMeta(meta)) {
-				return c.json({ error: 'invalid meta' }, { status: 500 })
-			}
-			c.set('meta', meta)
+			const config = CounterConfig.fromJson(metaText)
+			c.set('config', config)
 		}
 		await next()
 	})
 
 	.post(routes.v1.counter.new, async (c) => {
-		if (c.get('meta')) {
+		if (c.get('config')) {
 			return c.json({ error: 'already exists' }, { status: 409 })
 		}
 
 		// Get an ID from the name so that it's consistent
 		const id = c.env.COUNTER.idFromName(c.get('configPath'))
-		const newMeta: CounterMeta = {
+		const flags = flagsSchema.createDefault()
+		// Auth is not possible right now so disable it
+		flags.set(flagsSchema.fields.useAuth, false)
+		const newConfig = new CounterConfig({
 			v: 1,
 			id: id.toString(),
-		}
-		await c.env.CONFIG.put(c.get('configPath'), JSON.stringify(newMeta))
+			f: flags.toBase64(),
+		})
+		await c.env.CONFIG.put(c.get('configPath'), newConfig.toJson())
 		return c.json({ result: 'created' })
 	})
 
 	.get(routes.v1.counter.get, async (c) => {
-		const meta = c.get('meta')
-		if (!meta) {
+		const config = c.get('config')
+		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
 		}
-		const id = c.env.COUNTER.idFromString(meta.id)
+		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)
 	})
 
 	.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
-		const meta = c.get('meta')
-		if (!meta) {
+		const config = c.get('config')
+		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
 		}
-		const id = c.env.COUNTER.idFromString(meta.id)
+		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
 		return stub.fetch(c.req.raw)
 	})

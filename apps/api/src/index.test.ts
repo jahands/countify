@@ -1,7 +1,7 @@
 import { unstable_dev } from 'wrangler'
 import fs from 'fs/promises'
 import type { UnstableDevWorker } from 'wrangler'
-import { describe, expect, it, beforeAll, afterAll } from 'vitest'
+import { describe, beforeAll, afterAll } from 'vitest'
 
 describe.skip('Worker', () => {
 	let worker: UnstableDevWorker

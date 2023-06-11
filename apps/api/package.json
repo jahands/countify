@@ -25,6 +25,7 @@
 	"dependencies": {
 		"hono": "^3.2.4",
 		"p-queue": "^7.3.4",
-		"toucan-js": "^3.1.0"
+		"toucan-js": "^3.1.0",
+		"store": "*"
 	}
 }

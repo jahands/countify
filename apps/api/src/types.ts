@@ -20,14 +20,4 @@ export type App = {
 	Variables: Variables
 }
 
-/** Counter KV metadata */
-export interface CounterMeta {
-	/** Version of the meta in case we change it later */
-	v: 1
-	/** Durable Object ID of the counter. This saves
-	 * us from having to do `c.env.COUNTER.idFromName()`
-	 */
-	id: string
-}
-
 export type CounterAction = 'new' | 'get' | 'inc'
