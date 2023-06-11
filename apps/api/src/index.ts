@@ -102,7 +102,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		// Otherwise, return the response from the DO
 		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
-		await stub.fetch(c.req.raw)
+		return stub.fetch(c.req.raw)
 	})
 
 app.route('/v1', v1)
