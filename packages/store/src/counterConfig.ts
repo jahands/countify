@@ -81,4 +81,8 @@ export class CounterConfig implements CounterMeta {
 	useAuth(): boolean {
 		return this.flags.is(flagsSchema.fields.useAuth)
 	}
+
+	setUseAuth(useAuth: boolean): void {
+		this.flags.set(flagsSchema.fields.useAuth, useAuth)
+	}
 }
