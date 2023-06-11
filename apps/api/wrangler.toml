@@ -5,6 +5,9 @@ usage_model = "unbound"
 workers_dev = false
 routes = ["api.countify.dev/*"]
 
+[placement]
+mode = "smart"
+
 [define]
 ENVIRONMENT = '"production"'
 
