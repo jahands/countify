@@ -53,6 +53,20 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		return c.json({ result: 'created' })
 	})
 
+	// Auth rest of routes based on config
+	.use(routes.v1.counter.all, async (c, next) => {
+		const config = c.get('config')
+		if (!config) {
+			return c.json({ error: 'unauthorized' }, { status: 401 })
+		}
+
+		// TODO: Implement auth
+		if (config.useAuth()) {
+			return c.json({ error: 'unauthorized' }, { status: 401 })
+		}
+		await next()
+	})
+
 	.get(routes.v1.counter.get, async (c) => {
 		const config = c.get('config')
 		if (!config) {
