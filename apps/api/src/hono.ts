@@ -3,7 +3,7 @@ import { initSentry } from './sentry'
 import { App } from './types'
 
 /** Create a new root Hono app with Sentry */
-export function newHono(): Hono<App, {}, '/'> {
+export function newHono(): Hono<App, object, '/'> {
 	return (
 		new Hono<App>()
 			// Sentry

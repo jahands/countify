@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Hono } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
@@ -10,7 +11,7 @@ export class Counter {
 	bindings: Bindings
 	value: number | null
 	queue: PQueue
-	app: Hono<App, {}, '/'>
+	app: Hono<App, object, '/'>
 
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state
@@ -20,14 +21,16 @@ export class Counter {
 		this.app = this.newApp()
 	}
 
-	async fetch(request: Request) {
+	async fetch(request: Request): Promise<Response> {
 		return this.app.fetch(request, this.bindings, {
-			passThroughOnException: () => {},
+			passThroughOnException: () => {
+				return
+			},
 			waitUntil: this.state.waitUntil.bind(this.state),
 		})
 	}
 
-	newApp(): Hono<App, {}, '/'> {
+	newApp() {
 		const app = newHono()
 			// Add cors headers to all requests
 			.use(addCors)
@@ -59,7 +62,7 @@ export class Counter {
 		return v1
 	}
 
-	async save() {
+	async save(): Promise<void> {
 		if (this.queue.size < 2) {
 			this.queue.add(async () => {
 				// save value every 4 second to storage
