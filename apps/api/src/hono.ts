@@ -9,7 +9,10 @@ export function newHono(): Hono<App, object, '/'> {
 			// Sentry
 			.use(async (c, next) => {
 				c.set('sentry', initSentry(c.req.raw, c.env, c.executionCtx))
+				const start = Date.now()
 				await next()
+				const end = Date.now()
+				console.log(`TOTAL: ${end - start}ms`)
 				if (c.error) {
 					c.get('sentry').captureException(c.error)
 				}
