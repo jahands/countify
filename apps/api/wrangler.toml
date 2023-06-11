@@ -5,16 +5,17 @@ usage_model = "unbound"
 workers_dev = false
 routes = ["api.countify.dev/*"]
 
+[placement]
+mode = "smart"
+
 [define]
 ENVIRONMENT = '"production"'
 
 [durable_objects]
-bindings = [
-  { name = "COUNTER", class_name = "Counter" }
-]
+bindings = [{ name = "COUNTER", class_name = "Counter" }]
 
 [[migrations]]
-tag = "v1" # Should be unique for each entry
+tag = "v1"                # Should be unique for each entry
 new_classes = ["Counter"] # Array of new classes
 
 [[kv_namespaces]]
