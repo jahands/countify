@@ -100,9 +100,13 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		}
 
 		// Otherwise, return the response from the DO
+		const start2 = Date.now()
 		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
-		return stub.fetch(c.req.raw)
+		const res = await stub.fetch(c.req.raw)
+		const end2 = Date.now()
+		console.log(`fetched from do in ${end2 - start2}ms`)
+		return res
 	})
 
 app.route('/v1', v1)
