@@ -5,7 +5,7 @@
 	"pipeline": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": [".next/**", "!.next/cache/**", "dist/**/*"]
+			"outputs": [".next/**", "!.next/cache/**", "dist/**/*", "public/**/*"]
 		},
 		"test": {},
 		"test:watch": {},
@@ -14,7 +14,7 @@
 			"dependsOn": ["^lint", "^build", "deploy:wrangler", "sentry:sourcemaps", "sentry:commits", "sentry:finalize"]
 		},
 		"deploy:wrangler": {
-			"dependsOn": ["lint"],
+			"dependsOn": ["lint", "build"],
 			"outputs": ["dist/**/*"]
 		},
 		"sentry:sourcemaps": {
