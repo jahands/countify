@@ -15,6 +15,13 @@ module.exports = {
 				'@typescript-eslint/explicit-function-return-type': 'error',
 			},
 		},
+		{
+			files: ['*.tsx'],
+			rules: {
+				// Not using next/image
+				'@next/next/no-img-element': 'off',
+			}
+		}
 	],
 	parserOptions: {},
 }
