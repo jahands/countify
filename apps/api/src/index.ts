@@ -4,6 +4,7 @@ import { newHono } from './hono'
 import { routes } from './routes'
 import { addCors } from './cors'
 import { CounterConfig, flagsSchema } from 'store'
+import { btnApp } from './btn'
 
 export { Counter } from './Counter'
 
@@ -110,5 +111,6 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	})
 
 app.route('/v1', v1)
+app.route('/auth', btnApp)
 
 export default app
