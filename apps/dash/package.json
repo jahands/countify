@@ -12,6 +12,8 @@
 		"wrangler": "wrangler pages dev ./public"
 	},
 	"dependencies": {
+		"@headlessui/react": "^1.7.15",
+		"@heroicons/react": "^2.0.18",
 		"@remix-run/cloudflare": "^1.17.1",
 		"@remix-run/cloudflare-pages": "^1.17.1",
 		"@remix-run/css-bundle": "^1.17.1",

@@ -2,7 +2,13 @@ import type { LinksFunction } from '@remix-run/cloudflare'
 import stylesheet from '~/tailwind.css'
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }]
+export const links: LinksFunction = () => [
+	{ rel: 'stylesheet', href: stylesheet },
+	{
+		rel: 'stylesheet',
+		href: 'https://rsms.me/inter/inter.css',
+	},
+]
 
 export default function App() {
 	return (
