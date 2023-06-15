@@ -9,7 +9,8 @@
 		"lint": "eslint \"app/**/*.[tj]s?(x)\" --cache --cache-strategy content --max-warnings=0",
 		"start": "cross-env NODE_ENV=production npm run wrangler",
 		"typecheck": "tsc",
-		"wrangler": "wrangler pages dev ./public"
+		"wrangler": "wrangler pages dev ./public",
+		"deploy": "wrangler pages publish public --project-name countify-dash"
 	},
 	"dependencies": {
 		"@headlessui/react": "^1.7.15",
