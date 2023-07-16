@@ -10,5 +10,6 @@ export function initSentry(request: Request, env: Bindings, ctx: ExecutionContex
 		environment: ENVIRONMENT,
 		release: env.SENTRY_RELEASE,
 		request,
+		tracesSampleRate: 1.0,
 	})
 }

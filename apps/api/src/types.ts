@@ -1,4 +1,5 @@
 import { Toucan } from 'toucan-js'
+import { Transaction } from '@sentry/types'
 
 /** Workers bindings */
 export type Bindings = {
@@ -12,6 +13,7 @@ export type Bindings = {
 /** Global Hono variables */
 export type Variables = {
 	sentry: Toucan
+	tx: Transaction
 }
 
 /** Top-level Hono app */

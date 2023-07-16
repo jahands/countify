@@ -8,7 +8,7 @@ import { btnApp } from './btn'
 
 export { Counter } from './Counter'
 
-const app = newHono().use(addCors)
+const app = newHono({ transaction: { op: 'http.server' } }).use(addCors)
 
 const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {

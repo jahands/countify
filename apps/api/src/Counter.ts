@@ -31,7 +31,7 @@ export class Counter {
 	}
 
 	newApp() {
-		const app = newHono()
+		const app = newHono({ transaction: { op: 'http.server.durable_object' } })
 			// Add cors headers to all requests
 			.use(addCors)
 			.route('/v1', this.newV1())

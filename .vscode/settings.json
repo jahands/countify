@@ -8,5 +8,6 @@
 		"tsconfig.json": "tsconfig.*.json",
 		"package.json": "package-lock.json, .npmrc, yarn.lock, .yarnrc, .nvmrc, .node-version, .eslintrc, .eslintcache, postcss.config.js, remix.config.js, remix.env.d.ts, tailwind.config.js, tsconfig.json, .prettierrc, .env, .gitignore, server.ts, .eslintrc.js, tailwind.config.ts, turbo.json, LICENSE, wrangler.toml"
 	},
-	"editor.detectIndentation": true
+	"editor.detectIndentation": true,
+	"prettier.prettierPath": "node_modules/prettier"
 }
