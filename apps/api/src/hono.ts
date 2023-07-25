@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { initSentry } from './sentry'
+import '@sentry/tracing'
 import { App } from './types'
 
 /** Create a new root Hono app with Sentry */
