@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sentry-cli releases set-commits $(../../bin/version) --auto --project $1

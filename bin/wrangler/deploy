@@ -1,0 +1,3 @@
+#!/bin/sh
+
+wrangler deploy --minify --outdir ./dist --var SENTRY_RELEASE:$(../../bin/version)

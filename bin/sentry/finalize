@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sentry-cli releases finalize $(../../bin/version) --project $1

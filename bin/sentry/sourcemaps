@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sentry-cli sourcemaps upload ./dist/ --strip-prefix './dist/../' --release $(../../bin/version) --project $1

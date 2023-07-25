@@ -3,13 +3,13 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"deploy:wrangler": "wrangler deploy --minify --outdir ./dist --var SENTRY_RELEASE:$(scripts/version.sh)",
-		"build:wrangler": "wrangler deploy --dry-run --outdir=dist",
+		"deploy:wrangler": "../../bin/wrangler/deploy",
+		"build:wrangler": "../../bin/wrangler/build",
+		"lint": "../../bin/eslint/workers",
+		"sentry:sourcemaps": "../../bin/sentry/sourcemaps countify-api",
+		"sentry:commits": "../../bin/sentry/commits countify-api",
+		"sentry:finalize": "../../bin/sentry/finalize countify-api",
 		"dev": "wrangler dev",
-		"lint": "eslint \"src/**/*.[tj]s?(x)\" --cache --cache-strategy content --max-warnings=0",
-		"sentry:sourcemaps": "sentry-cli --url https://sentry.uuid.rocks sourcemaps upload ./dist/ --strip-prefix './dist/../' --release $(scripts/version.sh) --org sentry --project countify-api",
-		"sentry:commits": "sentry-cli --url https://sentry.uuid.rocks releases set-commits $(scripts/version.sh) --auto --org sentry --project countify-api",
-		"sentry:finalize": "sentry-cli --url https://sentry.uuid.rocks releases finalize $(scripts/version.sh) --org sentry --project countify-api",
 		"test": "vitest run"
 	},
 	"devDependencies": {
