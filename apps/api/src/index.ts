@@ -44,23 +44,16 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		const { namespace } = c.req.param()
 		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks']
 		if (reservedNamespaces.includes(namespace)) {
-			const auth = c.req.header('authorization')
+			const token = c.req.header('x-api-key')
 			const unauthorized = (): Response => c.json({ error: 'unauthorized' }, { status: 401 })
 
-			if (!auth) {
+			if (!token) {
 				return unauthorized()
 			}
 
-			const parts = auth.split('Bearer ')
-			if (parts.length !== 2) {
-				return unauthorized()
-			}
-
-			const token = parts[1]
 			if (token !== c.env.ADMIN_TOKEN) {
 				return unauthorized()
 			}
-			return unauthorized()
 		}
 
 		await next()
