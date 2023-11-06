@@ -56,7 +56,12 @@ export class Counter {
 
 			.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
 				const existing = this.value || 0
-				this.value = existing + 1
+
+				// Optionally increment by a value
+				const val = c.req.query('value')
+				const value = val ? parseInt(val) : 1
+
+				this.value = existing + value
 				this.save()
 				return c.json({ value: this.value })
 			})
