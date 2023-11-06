@@ -10,7 +10,7 @@ export function newHono(args: { transaction: { op: string } }): Hono<App, object
 			// Sentry
 			.use(async (c, next) => {
 				const sentry = initSentry(c.req.raw, c.env, c.executionCtx)
-				const tx = sentry.startTransaction({ name: c.req.path, op: args.transaction.op })
+				const tx = sentry.startTransaction({ name: c.req.path, op: args.transaction.op, tags: { urlPath: c.req.path } })
 				sentry.configureScope((scope) => {
 					scope.setSpan(tx)
 				})
