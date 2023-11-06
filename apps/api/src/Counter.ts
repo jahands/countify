@@ -44,7 +44,9 @@ export class Counter {
 			.all(routes.v1.counter.all, async (c, next) => {
 				// Load value from storage and set a timeout to save it
 				if (this.value === null) {
+					const span = c.get('tx').startChild({ op: 'load_value', description: 'Load value from storage' })
 					this.value = (await this.state.storage.get('value')) || 0
+					span.finish()
 				}
 				await next()
 			})
