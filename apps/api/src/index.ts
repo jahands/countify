@@ -14,7 +14,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	.use(routes.v1.counter.all, async (c, next) => {
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
-		const re = /^[a-zA-Z0-9_\-.]{4,64}$/
+		const re = /^[a-z0-9_\-.]{4,64}$/
 
 		if (!re.test(namespace)) {
 			return c.json({ error: `invalid namespace, must match ${re}` }, { status: 400 })
