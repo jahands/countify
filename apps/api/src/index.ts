@@ -40,7 +40,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	})
 
 	// Reserved namespaces require special auth
-	.use(routes.v1.counter.new, async (c, next) => {
+	.use(routes.v1.counter.all, async (c, next) => {
 		const { namespace } = c.req.param()
 		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks']
 		if (reservedNamespaces.includes(namespace)) {
