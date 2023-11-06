@@ -136,11 +136,18 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 
 		// Otherwise, return the response from the DO
 		const start2 = Date.now()
+		const span = c.get('tx').startChild({ op: 'get_counter_id', description: 'Get counter DO ID' })
 		const id = c.env.COUNTER.idFromString(config.id)
-		const stub = c.env.COUNTER.get(id)
-		const span = c.get('tx').startChild({ op: 'fetch_counter', description: 'Fetch counter from DO' })
-		const res = await stub.fetch(c.req.raw)
 		span.finish()
+
+		const span2 = c.get('tx').startChild({ op: 'get_counter_stub', description: 'Get counter DO stub' })
+		const stub = c.env.COUNTER.get(id)
+		span2.finish()
+
+		const span3 = c.get('tx').startChild({ op: 'fetch_counter', description: 'Fetch counter from DO' })
+		const res = await stub.fetch(c.req.raw)
+		span3.finish()
+
 		const end2 = Date.now()
 		console.log(`fetched from do in ${end2 - start2}ms`)
 		return res
