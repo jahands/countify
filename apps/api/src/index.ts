@@ -28,7 +28,9 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		c.set('configPath', configPath)
 
 		const start = new Date().getTime()
+		const span = c.get('tx').startChild({ op: 'get_config', description: 'Get config from KV' })
 		const metaText = await c.env.CONFIG.get(configPath, { cacheTtl: 120 })
+		span.finish()
 		const end = new Date().getTime()
 		console.log(`got config in ${end - start}ms`)
 
@@ -97,9 +99,21 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
 		}
+		const span = c.get('tx').startChild({ op: 'get_counter_id', description: 'Get counter DO ID' })
 		const id = c.env.COUNTER.idFromString(config.id)
+		span.finish()
+
+		const span2 = c.get('tx').startChild({ op: 'get_counter_stub', description: 'Get counter DO stub' })
 		const stub = c.env.COUNTER.get(id)
-		return stub.fetch(c.req.raw)
+		span2.finish()
+
+		const span3 = c.get('tx').startChild({ op: 'fetch_counter', description: 'Fetch counter from DO' })
+		try {
+			const res = await stub.fetch(c.req.raw)
+			return res
+		} finally {
+			span3.finish()
+		}
 	})
 
 	.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
@@ -124,7 +138,9 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		const start2 = Date.now()
 		const id = c.env.COUNTER.idFromString(config.id)
 		const stub = c.env.COUNTER.get(id)
+		const span = c.get('tx').startChild({ op: 'fetch_counter', description: 'Fetch counter from DO' })
 		const res = await stub.fetch(c.req.raw)
+		span.finish()
 		const end2 = Date.now()
 		console.log(`fetched from do in ${end2 - start2}ms`)
 		return res
