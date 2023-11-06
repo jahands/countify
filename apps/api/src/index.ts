@@ -39,6 +39,33 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 		await next()
 	})
 
+	// Reserved namespaces require special auth
+	.use(routes.v1.counter.new, async (c, next) => {
+		const { namespace } = c.req.param()
+		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks']
+		if (reservedNamespaces.includes(namespace)) {
+			const auth = c.req.header('authorization')
+			const unauthorized = (): Response => c.json({ error: 'unauthorized' }, { status: 401 })
+
+			if (!auth) {
+				return unauthorized()
+			}
+
+			const parts = auth.split('Bearer ')
+			if (parts.length !== 2) {
+				return unauthorized()
+			}
+
+			const token = parts[1]
+			if (token !== c.env.ADMIN_TOKEN) {
+				return unauthorized()
+			}
+			return unauthorized()
+		}
+
+		await next()
+	})
+
 	.post(routes.v1.counter.new, async (c) => {
 		if (c.get('config')) {
 			return c.json({ error: 'already exists' }, { status: 409 })

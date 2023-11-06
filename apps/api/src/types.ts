@@ -8,6 +8,8 @@ export type Bindings = {
 
 	CONFIG: KVNamespace
 	COUNTER: DurableObjectNamespace
+	/** Temp admin token until I implement proper user management */
+	ADMIN_TOKEN: string
 }
 
 /** Global Hono variables */
