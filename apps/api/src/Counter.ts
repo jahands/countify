@@ -58,10 +58,10 @@ export class Counter {
 				const existing = this.value || 0
 
 				// Optionally increment by a value
-				const val = c.req.query('value')
-				const value = val ? parseInt(val) : 1
+				const amt = c.req.query('amount')
+				const amount = amt ? parseInt(amt) : 1
 
-				this.value = existing + value
+				this.value = existing + amount
 				this.save()
 				return c.json({ value: this.value })
 			})
