@@ -44,7 +44,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	// Reserved namespaces require special auth
 	.use(routes.v1.counter.all, async (c, next) => {
 		const { namespace } = c.req.param()
-		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks']
+		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks', 'jacob']
 		if (reservedNamespaces.includes(namespace)) {
 			const token = c.req.header('x-api-key')
 			const unauthorized = (): Response => c.json({ error: 'unauthorized' }, { status: 401 })
