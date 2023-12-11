@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Hono } from 'hono'
+import { Hono, Schema } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
 import { addCors } from './cors'
@@ -11,7 +11,7 @@ export class Counter {
 	bindings: Bindings
 	value: number | null
 	queue: PQueue
-	app: Hono<App, {}, '/'>
+	app: Hono<App, Schema, '/'>
 
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state

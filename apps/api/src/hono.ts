@@ -1,10 +1,10 @@
-import { Hono } from 'hono'
+import { Hono, Schema } from 'hono'
 import { initSentry } from './sentry'
 import '@sentry/tracing'
 import { App } from './types'
 
 /** Create a new root Hono app with Sentry */
-export function newHono(args: { transaction: { op: string } }): Hono<App, {}, '/'> {
+export function newHono(args: { transaction: { op: string } }): Hono<App, Schema, '/'> {
 	return (
 		new Hono<App>()
 			// Sentry
