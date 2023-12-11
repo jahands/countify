@@ -11,7 +11,7 @@ export class Counter {
 	bindings: Bindings
 	value: number | null
 	queue: PQueue
-	app: Hono<App, object, '/'>
+	app: Hono<App, {}, '/'>
 
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state

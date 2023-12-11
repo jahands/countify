@@ -4,14 +4,14 @@ import '@sentry/tracing'
 import { App } from './types'
 
 /** Create a new root Hono app with Sentry */
-export function newHono(args: { transaction: { op: string } }): Hono<App, object, '/'> {
+export function newHono(args: { transaction: { op: string } }): Hono<App, {}, '/'> {
 	return (
 		new Hono<App>()
 			// Sentry
 			.use(async (c, next) => {
 				const sentry = initSentry(c.req.raw, c.env, c.executionCtx)
 				const tx = sentry.startTransaction({
-					name: c.req.path,
+					name: c.req.routePath,
 					op: args.transaction.op,
 					tags: { urlPath: c.req.path, rootOP: args.transaction.op },
 				})
