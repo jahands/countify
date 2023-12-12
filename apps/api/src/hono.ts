@@ -11,7 +11,7 @@ export function newHono(args: { transaction: { op: string } }): Hono<App, Schema
 			.use('*', async (c, next) => {
 				const sentry = initSentry(c.req.raw, c.env, c.executionCtx)
 				const tx = sentry.startTransaction({
-					name: c.req.routePath,
+					name: c.req.path,
 					op: args.transaction.op,
 					tags: { urlPath: c.req.path, rootOP: args.transaction.op },
 				})
