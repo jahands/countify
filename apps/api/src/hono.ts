@@ -8,7 +8,7 @@ export function newHono(args: { transaction: { op: string } }): Hono<App, Schema
 	return (
 		new Hono<App>()
 			// Sentry
-			.use(async (c, next) => {
+			.use('*', async (c, next) => {
 				const sentry = initSentry(c.req.raw, c.env, c.executionCtx)
 				const tx = sentry.startTransaction({
 					name: c.req.routePath,
