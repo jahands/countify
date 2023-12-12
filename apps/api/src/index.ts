@@ -12,6 +12,7 @@ const app = newHono({ transaction: { op: 'http.server' } }).use(addCors)
 
 const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
+		c.get('tx').setName(c.req.routePath)
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
 		const re = /^[a-z0-9_\-.]{4,64}$/
@@ -43,6 +44,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 
 	// Reserved namespaces require special auth
 	.use(routes.v1.counter.all, async (c, next) => {
+		c.get('tx').setName(c.req.routePath)
 		const { namespace } = c.req.param()
 		const reservedNamespaces = ['auth', 'api', 'www', 'blog', 'docs', 'support', 'status', 'uuid.rocks', 'uuid-rocks', 'jacob']
 		if (reservedNamespaces.includes(namespace)) {
@@ -62,6 +64,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	})
 
 	.post(routes.v1.counter.new, async (c) => {
+		c.get('tx').setName(c.req.routePath)
 		if (c.get('config')) {
 			return c.json({ error: 'already exists' }, { status: 409 })
 		}
@@ -82,6 +85,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 
 	// Auth rest of routes based on config
 	.use(routes.v1.counter.all, async (c, next) => {
+		c.get('tx').setName(c.req.routePath)
 		const config = c.get('config')
 		if (!config) {
 			return c.json({ error: 'unauthorized' }, { status: 401 })
@@ -95,6 +99,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	})
 
 	.get(routes.v1.counter.get, async (c) => {
+		c.get('tx').setName(c.req.routePath)
 		const config = c.get('config')
 		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
@@ -117,6 +122,7 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 	})
 
 	.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
+		c.get('tx').setName(c.req.routePath)
 		const config = c.get('config')
 		if (!config) {
 			return c.json({ error: 'not found' }, { status: 404 })
