@@ -24,6 +24,7 @@ export function newHono(args: { transaction: { op: string } }): Hono<App, Schema
 
 				await next()
 
+				c.get('tx').setName(c.req.routePath)
 				c.get('tx').finish()
 			})
 			.onError((err, c) => {

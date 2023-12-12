@@ -42,7 +42,7 @@ export class Counter {
 	newV1() {
 		const v1 = new Hono<App>()
 			.all(routes.v1.counter.all, async (c, next) => {
-				c.get('tx').setName(c.req.routePath)
+				
 				// Load value from storage and set a timeout to save it
 				if (this.value === null) {
 					const span = c.get('tx').startChild({ op: 'load_value', description: 'Load value from storage' })
@@ -53,13 +53,11 @@ export class Counter {
 			})
 
 			.get(routes.v1.counter.get, async (c) => {
-				c.get('tx').setName(c.req.routePath)
 				const value = this.value || 0
 				return c.json({ value })
 			})
 
 			.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
-				c.get('tx').setName(c.req.routePath)
 				const existing = this.value || 0
 
 				// Optionally increment by a value
