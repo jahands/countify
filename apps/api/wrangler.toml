@@ -4,6 +4,9 @@ compatibility_date = "2023-06-04"
 workers_dev = false
 routes = ["api.countify.dev/*"]
 
+[placement]
+mode = "smart"
+
 [define]
 ENVIRONMENT = '"production"'
 
