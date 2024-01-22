@@ -13,6 +13,7 @@
 		"eslint-config-custom": "workspace:*",
 		"prettier": "^2.5.1",
 		"turbo": "^1.10.12",
+		"typescript": "^5.3.3",
 		"wrangler": "^3.23.0"
 	},
 	"name": "countify",

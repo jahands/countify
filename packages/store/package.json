@@ -5,7 +5,7 @@
 	"description": "Manage config for the app",
 	"main": "src/index.ts",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},
