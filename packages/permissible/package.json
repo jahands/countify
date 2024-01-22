@@ -19,9 +19,9 @@
 	"license": "MIT",
 	"devDependencies": {
 		"eslint": "^8.42.0",
-		"eslint-config-custom": "*",
+		"eslint-config-custom": "workspace:*",
 		"ts-node": "^10.9.1",
-		"tsconfig": "*",
+		"tsconfig": "workspace:*",
 		"typescript": "^5.1.3",
 		"vitest": "^0.32.0"
 	},

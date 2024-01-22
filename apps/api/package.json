@@ -15,20 +15,20 @@
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20230419.0",
 		"@sentry/cli": "^2.18.1",
-		"eslint-config-custom": "*",
+		"eslint-config-custom": "workspace:*",
 		"itty-router": "^3.0.12",
 		"prettier": "^3.0.0",
-		"tsconfig": "*",
+		"tsconfig": "workspace:*",
 		"typescript": "^5.0.4",
 		"vitest": "^0.32.0",
-		"wrangler": "^3.0.1"
+		"wrangler": "^3.23.0"
 	},
 	"dependencies": {
-		"@sentry/tracing": "^7.28.1",
-		"@sentry/types": "^7.28.1",
+		"@sentry/tracing": "7.76.0",
+		"@sentry/types": "7.76.0",
 		"hono": "^3.11.4",
 		"p-queue": "^7.3.4",
-		"store": "*",
-		"toucan-js": "^3.1.0"
+		"store": "workspace:*",
+		"toucan-js": "3.3.1"
 	}
 }

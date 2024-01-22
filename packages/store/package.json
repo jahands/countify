@@ -12,11 +12,11 @@
 	"author": "",
 	"license": "Apache 2.0",
 	"dependencies": {
-		"permissible": "*"
+		"permissible": "workspace:*"
 	},
 	"devDependencies": {
 		"vitest": "^0.32.0",
-		"tsconfig": "*",
-		"eslint-config-custom": "*"
+		"tsconfig": "workspace:*",
+		"eslint-config-custom": "workspace:*"
 	}
 }
