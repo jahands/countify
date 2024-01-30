@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
-import type { App } from './types'
+import { instrument, ResolveConfigFn } from '@microlabs/otel-cf-workers'
+import type { App, Bindings } from './types'
 import { newHono } from './hono'
 import { routes } from './routes'
 import { addCors } from './cors'
@@ -8,11 +9,28 @@ import { btnApp } from './btn'
 
 export { Counter } from './Counter'
 
+const config: ResolveConfigFn = (env: Bindings, _trigger) => {
+	return {
+		exporter: {
+			url: 'https://api.axiom.co/v1/traces',
+			headers: {
+				authorization: `Bearer ${env.AXIOM_API_KEY}`,
+				'x-axiom-dataset': 'workers-otel',
+			},
+		},
+		service: {
+			name: 'countify-api',
+			namespace: 'countify',
+			version: env.SENTRY_RELEASE,
+		},
+	}
+}
+
 const app = newHono({ transaction: { op: 'http.server' } }).use(addCors)
 
 const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
-		
+
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
 		const re = /^[a-z0-9_\-.]{4,64}$/
@@ -157,4 +175,8 @@ const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: str
 app.route('/v1', v1)
 app.route('/auth', btnApp)
 
-export default app
+const handler = {
+	fetch: app.fetch
+}
+
+export default instrument(handler, config)

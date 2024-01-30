@@ -5,6 +5,7 @@ import { Transaction } from '@sentry/types'
 export type Bindings = {
 	SENTRY_DSN: string
 	SENTRY_RELEASE: string
+	AXIOM_API_KEY: string
 
 	CONFIG: KVNamespace
 	COUNTER: DurableObjectNamespace
