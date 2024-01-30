@@ -18,7 +18,6 @@ const config: ResolveConfigFn = (env: Bindings, _trigger) => {
 		},
 		service: {
 			name: 'countify-api-do',
-			namespace: 'countify',
 			version: env.SENTRY_RELEASE,
 		},
 	}
