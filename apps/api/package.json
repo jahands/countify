@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"@microlabs/otel-cf-workers": "1.0.0-rc.15",
+		"@opentelemetry/api": "^1.5.0",
 		"@sentry/tracing": "7.76.0",
 		"@sentry/types": "7.76.0",
 		"hono": "^3.11.4",

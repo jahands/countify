@@ -35,6 +35,9 @@ importers:
       '@microlabs/otel-cf-workers':
         specifier: 1.0.0-rc.15
         version: 1.0.0-rc.15
+      '@opentelemetry/api':
+        specifier: ^1.5.0
+        version: 1.5.0
       '@sentry/tracing':
         specifier: 7.76.0
         version: 7.76.0
@@ -2303,6 +2306,12 @@ packages:
     dependencies:
       json-parse-even-better-errors: 2.3.1
     dev: true
+
+  /@opentelemetry/api@1.5.0:
+    resolution: {integrity: sha512-636km3y3pVyJldKGp9qM+lPvxuOvhThUED9cHNPsERkp+APbdtCtj0sALW+mZsbQqnqQkNRHqoGw/Uc82UP6fQ==}
+    engines: {node: '>=8.0.0'}
+    deprecated: Version 1.5.0 of @opentelemetry/api mistakenly contained a breaking change for some users. Please update to 1.6.0 or later.
+    dev: false
 
   /@opentelemetry/api@1.7.0:
     resolution: {integrity: sha512-AdY5wvN0P2vXBi3b29hxZgSFvdhdxPB9+f0B6s//P9Q8nibRWeA3cHm8UmLpio9ABigkVHJ5NMPk+Mz8VCCyrw==}

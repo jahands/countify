@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { instrumentDO, ResolveConfigFn } from '@microlabs/otel-cf-workers'
 import { Hono, Schema } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
@@ -6,7 +7,26 @@ import { addCors } from './cors'
 import { routes } from './routes'
 import PQueue from 'p-queue'
 
-export class Counter {
+const config: ResolveConfigFn = (env: Bindings, _trigger) => {
+	return {
+		exporter: {
+			url: 'https://api.axiom.co/v1/traces',
+			headers: {
+				authorization: `Bearer ${env.AXIOM_API_KEY}`,
+				'x-axiom-dataset': 'workers-otel',
+			},
+		},
+		service: {
+			name: 'countify-api-do',
+			namespace: 'countify',
+			version: env.SENTRY_RELEASE,
+		},
+	}
+}
+
+
+
+class CounterDO implements DurableObject {
 	state: DurableObjectState
 	bindings: Bindings
 	value: number | null
@@ -42,7 +62,6 @@ export class Counter {
 	newV1() {
 		const v1 = new Hono<App>()
 			.all(routes.v1.counter.all, async (c, next) => {
-				
 				// Load value from storage and set a timeout to save it
 				if (this.value === null) {
 					const span = c.get('tx').startChild({ op: 'load_value', description: 'Load value from storage' })
@@ -82,3 +101,7 @@ export class Counter {
 		}
 	}
 }
+
+const Counter = instrumentDO(CounterDO, config)
+
+export { Counter }
