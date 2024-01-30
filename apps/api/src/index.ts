@@ -29,7 +29,6 @@ const app = newHono({ transaction: { op: 'http.server' } }).use(addCors)
 
 const v1 = new Hono<App & { Variables: { config?: CounterConfig; configPath: string } }>()
 	.use(routes.v1.counter.all, async (c, next) => {
-
 		// Validate namespace/name
 		const { namespace, name } = c.req.param()
 		const re = /^[a-z0-9_\-.]{4,64}$/
@@ -175,7 +174,7 @@ app.route('/v1', v1)
 app.route('/auth', btnApp)
 
 const handler = {
-	fetch: app.fetch
+	fetch: app.fetch,
 }
 
 export default instrument(handler, config)

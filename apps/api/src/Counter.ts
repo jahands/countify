@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { instrumentDO, ResolveConfigFn } from '@microlabs/otel-cf-workers'
-import { Hono, Schema } from 'hono'
+import { Context, Hono, Schema } from 'hono'
 import { newHono } from './hono'
 import { App, Bindings } from './types'
 import { addCors } from './cors'
@@ -23,19 +23,15 @@ const config: ResolveConfigFn = (env: Bindings, _trigger) => {
 	}
 }
 
-
-
 class CounterDO implements DurableObject {
 	state: DurableObjectState
 	bindings: Bindings
-	value: number | null
 	queue: PQueue
 	app: Hono<App, Schema, '/'>
 
 	constructor(state: DurableObjectState, bindings: Bindings) {
 		this.state = state
 		this.bindings = bindings
-		this.value = null
 		this.queue = new PQueue({ concurrency: 1, autoStart: true })
 		this.app = this.newApp()
 	}
@@ -58,46 +54,36 @@ class CounterDO implements DurableObject {
 		return app
 	}
 
+	async getValue(c: Context<App>): Promise<number> {
+		const span = c.get('tx').startChild({ op: 'load_value', description: 'Load value from storage' })
+		const value = (await this.state.storage.get<number>('value')) || 0
+		span.finish()
+		return value
+	}
+	setValue(value: number): void {
+		this.state.storage.put('value', value)
+	}
+
 	newV1() {
 		const v1 = new Hono<App>()
-			.all(routes.v1.counter.all, async (c, next) => {
-				// Load value from storage and set a timeout to save it
-				if (this.value === null) {
-					const span = c.get('tx').startChild({ op: 'load_value', description: 'Load value from storage' })
-					this.value = (await this.state.storage.get('value')) || 0
-					span.finish()
-				}
-				await next()
-			})
-
 			.get(routes.v1.counter.get, async (c) => {
-				const value = this.value || 0
+				const value = await this.getValue(c)
 				return c.json({ value })
 			})
 
 			.on(['get', 'post'], routes.v1.counter.inc, async (c) => {
-				const existing = this.value || 0
+				const existing = await this.getValue(c)
 
 				// Optionally increment by a value
 				const amt = c.req.query('amount')
 				const amount = amt ? parseInt(amt) : 1
 
-				this.value = existing + amount
-				this.save()
-				return c.json({ value: this.value })
+				const newValue = existing + amount
+				this.setValue(newValue)
+				return c.json({ value: newValue })
 			})
 
 		return v1
-	}
-
-	async save(): Promise<void> {
-		if (this.queue.size < 2) {
-			this.queue.add(async () => {
-				// save value every 4 second to storage
-				await scheduler.wait(4000)
-				this.state.storage.put('value', this.value)
-			})
-		}
 	}
 }
 
