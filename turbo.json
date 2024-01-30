@@ -11,10 +11,10 @@
 		"test:watch": {},
 		"lint": {},
 		"deploy": {
-			"dependsOn": ["^lint", "^build", "deploy:wrangler", "sentry:sourcemaps", "sentry:commits", "sentry:finalize"]
+			"dependsOn": ["^build", "deploy:wrangler", "sentry:sourcemaps", "sentry:commits", "sentry:finalize"]
 		},
 		"deploy:wrangler": {
-			"dependsOn": ["lint", "build"],
+			"dependsOn": ["build"],
 			"outputs": ["dist/**/*"]
 		},
 		"sentry:sourcemaps": {
