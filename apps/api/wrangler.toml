@@ -6,7 +6,7 @@ workers_dev = false
 routes = ["api.countify.dev/*"]
 
 [placement]
-mode = "smart"
+mode = "off"
 
 [define]
 ENVIRONMENT = '"production"'
