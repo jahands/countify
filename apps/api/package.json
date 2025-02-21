@@ -6,9 +6,9 @@
 		"deploy:wrangler": "../../bin/wrangler/deploy",
 		"build:wrangler": "../../bin/wrangler/build",
 		"lint": "../../bin/eslint/workers",
-		"sentry:sourcemaps": "../../bin/sentry/sourcemaps countify-api",
-		"sentry:commits": "../../bin/sentry/commits countify-api",
-		"sentry:finalize": "../../bin/sentry/finalize countify-api",
+		"sentry:sourcemaps": "../../bin/sentry/sourcemaps countify-old",
+		"sentry:commits": "../../bin/sentry/commits countify-old",
+		"sentry:finalize": "../../bin/sentry/finalize countify-old",
 		"dev": "wrangler dev",
 		"test": "vitest run"
 	},
