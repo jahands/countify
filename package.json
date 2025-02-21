@@ -17,12 +17,22 @@
 		"wrangler": "^3.23.0"
 	},
 	"name": "countify",
-	"packageManager": "npm@9.6.6",
+	"packageManager": "pnpm@10.4.1",
 	"workspaces": [
 		"apps/*",
 		"packages/*"
 	],
 	"volta": {
 		"node": "18.16.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@sentry/cli",
+			"core-js-pure",
+			"deasync",
+			"esbuild",
+			"sharp",
+			"workerd"
+		]
 	}
 }
